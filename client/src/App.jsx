@@ -1,10 +1,11 @@
 import './App.css'
+import Dashboard from './Components/Dashboard/Dashboard'
 
 function App() {
   return (
-    <>
-    <div className="text-center text-4xl" >Hello World!</div>
-    </>
+    <div className='bg-[#4DA2A9] min-h-full'>
+      <Dashboard/>
+    </div>
   )
 }
 

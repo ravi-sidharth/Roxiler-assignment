@@ -5,35 +5,51 @@ const Dashboard = () => {
     const [transactionsData, setTransactionData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [month,setMonth] = useState(3)
+    const [search,setSearch] = useState("")
 
     const perPage = 10
+    const noOfPage = Math.ceil(transactionsData.length/10)
+    const start = (currentPage-1) *perPage
+    const end = currentPage * perPage
 
+    const goToNextPage=()=> {
+      setCurrentPage(prev=>prev+1)
+    }
+
+    const goToPreviousPage = ()=> {
+      setCurrentPage(prev=>prev-1)
+    }
 
     const fetchAllTransactions = async() => {
-        const result =await  axios.get(`/api/transactions?month=${month}`)
-        setTransactionData(result.data.transactions)
-        console.log(result)
-        setCurrentPage(result.data.page)
+      const result =await  axios.get(`/api/transactions?month=${month}&search=${search}&page=${currentPage}`)
+      setTransactionData(result.data.transactions)
+      console.log(result)
+      setCurrentPage(result.data.page)
     }
 
-    const handleMonthValue = (e) => {
-        setMonth(e.target.value)
+    const handleMonthStatus = (e) => {
+      setMonth(e.target.value)
     }
+
+    const handleSearchData = (e) => {
+      setSearch(e.target.value)
+    }
+
     useEffect(()=> {
         fetchAllTransactions()
-    },[month])
+    },[month,search])
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
       <div className="flex justify-center text-4xl font-bold">
-        <div className="mt-5 p-4 border-2 w-[430px] rounded-lg shadow-[40px] shadow-blue-500">
+        <div className="mt-5 p-4 border-2 w-[430px] rounded-lg shadow-2xl shadow-cyan-400  bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
           Transaction Dashboard
         </div>
       </div>
       <div className="flex justify-between">
-        <div><input className="border rounded-lg" type="text" placeholder="Search transaction"/></div>
+        <div ><input onChange={(e)=>handleSearchData(e)} className="bg-gray-400 border rounded-lg px-2 cursor-pointer" type="text" placeholder="Search transaction"/></div>
         <div>
-            <select className="border rounded-lg" defaultValue="3" onChange={(e)=>handleMonthValue(e)} >
+            <select className="border rounded-lg bg-gray-400 cursor-pointer" defaultValue="3" onChange={(e)=>handleMonthStatus(e)} >
                 <option value="1">Jan</option>
                 <option value="2">Feb</option>
                 <option value="3">March</option>
@@ -50,10 +66,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="" >
-        <table className="mt-5 border">
+      <div className="text-[10px]" >
+        <table className="mt-5">
           <thead>
-            <tr className="border">
+            <tr className="">
               <th className="border">id</th>
               <th className="border">title</th>
               <th className="border">price</th>
@@ -63,11 +79,11 @@ const Dashboard = () => {
               <th className="border">sold</th>
             </tr>
           </thead>
-          <tbody className="border-2 ">
+          <tbody className="">
           {transactionsData && transactionsData.length>0 &&
-            transactionsData.map((each) => {
+            transactionsData.slice(start,end).map((each) => {
               return (
-                <tr className="border " key={each.id}>
+                <tr className="" key={each.id}>
                   <td className="text-center border ">{each.id}</td>
                   <td className="border">{each.title}</td>
                   <td className="text-center border">{each.price} Rs</td>
@@ -75,13 +91,14 @@ const Dashboard = () => {
                   <td className="text-center border">{each.category}</td>
                   <td className="text-center border">
                     <img
+                      className="object-cover text-center"
                       src={each.image}
-                      height={40}
-                      width={40}
+                      height={50}
+                      width={50}
                       alt={each.title}
                     />
                   </td>
-                  <td className="text-2xl text-center">
+                  <td className="border text-2xl text-center">
                     {each.sold ? "✅" : undefined}
                   </td>
                 </tr>
@@ -94,8 +111,8 @@ const Dashboard = () => {
       <div className="flex justify-between">
         <div>Page No:{currentPage}</div>
         <div>
-            <button>Next</button>-
-            <button>Previous</button>
+            <button disabled={currentPage===noOfPage} className={`cursor-pointer ${currentPage===noOfPage?'opacity-50':''}`} onClick={()=>goToNextPage()}  >Next</button>-
+            <button disabled={currentPage===1}  className={`cursor-pointer ${currentPage===1?'opacity-50':''}`}   onClick={()=>goToPreviousPage()}>Previous</button>
         </div>
         <div>Per Page:{perPage}</div>
       </div>

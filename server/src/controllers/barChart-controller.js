@@ -5,20 +5,7 @@ const fetchPriceRangeItems = async (req, res) => {
         const { month } = req.query
         const monthNumber = parseInt(month)
 
-        const priceRange = [
-            {min:0 , max:100},
-            {min:101 , max:200},
-            {min:201 , max:300},
-            {min:301 , max:400},
-            {min:401 , max:500},
-            {min:501 , max:600},
-            {min:601 , max:700},
-            {min:701 , max:800},
-            {min:801 , max:900},
-            {min:901 , max:infinity},
-        ]
-        
-        const barChartData = await Product.countDocuments([
+        const barChartData = await Product.aggregate([
             {
                 $match: {
                     $expr: {
@@ -30,13 +17,55 @@ const fetchPriceRangeItems = async (req, res) => {
                 }
             },
             {
-                price: {}
+                $group: {
+                    _id:0,
+                    "0-100": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 0] }, { $lte: ["$price", 100] }] }, 1, 0] }
+                    },
+                    "101-200": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 101] }, { $lte: ["$price", 200] }] }, 1, 0] },
+                    },
+                    "201-300": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 201] }, { $lte: ["$price", 300] }] }, 1, 0] },
+
+                    },
+                    "301-400": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 301] }, { $lte: ["$price", 400] }] }, 1, 0] }
+                    },
+                    "401-500": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 401] }, { $lte: ["$price", 500] }] }, 1, 0] },
+
+                    },
+                    "501-600": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 501] }, { $lte: ["$price", 600] }] }, 1, 0] },
+
+                    },
+                    "601-700": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 601] }, { $lte: ["$price", 700] }] }, 1, 0] },
+
+                    },
+                    "701-800": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 701] }, { $lte: ["$price", 800] }] }, 1, 0] },
+
+                    },
+                    "801-900": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 801] }, { $lte: ["$price", 900] }] }, 1, 0] },
+
+                    },
+                    "901-Above": {
+                        $sum: { $cond: [{ $and: [{ $gte: ["$price", 901] }, { $lte: ["$price", Infinity] }] }, 1, 0] },
+
+                    },
+
+
+                }
             }
         ])
-
+        console.log("BarChartData", barChartData)
         res.status(200).json({
-            success:true,
-            message:"Successfully fetched all items respective of price"
+            success: true,
+            message: "Successfully fetched all items respective of price",
+            barChartData
         })
     } catch (e) {
         console.log("Error occured while fetching price range items", e)

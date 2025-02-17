@@ -5,7 +5,7 @@ const fetchCombinedData = async(req,res) => {
     const {month} = req.query
     const transactionsData = await axios.get(`/transactions?month=${month}`, { baseURL: 'http://localhost:3000/api' });
     const statisticsData = await axios.get(`/statistics?month=${month}`, { baseURL: 'http://localhost:3000/api' }); 
-    // const barChartData = await axios.get(`/bar-chart?month=${month}`, { baseURL: 'http://localhost:3000/api' }); 
+    const barChartData = await axios.get(`/bar-chart?month=${month}`, { baseURL: 'http://localhost:3000/api' }); 
     const pieChartData = await axios.get(`/pie-chart?month=${month}`, { baseURL: 'http://localhost:3000/api' }); 
 
     res.status(200).json({
@@ -13,7 +13,7 @@ const fetchCombinedData = async(req,res) => {
         message:"Successfully combined data",
         transactionsData,
         statisticsData,
-        // barChartData,
+        barChartData,
         pieChartData
     })
    } catch(e) {

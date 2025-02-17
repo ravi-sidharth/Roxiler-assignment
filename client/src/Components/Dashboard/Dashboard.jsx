@@ -37,7 +37,7 @@ const Dashboard = () => {
 
     useEffect(()=> {
         fetchAllTransactions()
-    },[month,search])
+    },[month,search,currentPage])
 
   return (
     <div className="w-[80%] mx-auto bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
@@ -66,7 +66,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="text-[10px]" >
+      <div className="text-sm" >
         <table className="mt-5">
           <thead>
             <tr className="">
@@ -111,7 +111,7 @@ const Dashboard = () => {
       <div className="flex justify-between">
         <div>Page No:{currentPage}</div>
         <div>
-            <button disabled={currentPage===noOfPage} className={`cursor-pointer ${currentPage===noOfPage?'opacity-50':''}`} onClick={()=>goToNextPage()}  >Next</button>-
+            <button disabled={currentPage===noOfPage || noOfPage==0} className={`cursor-pointer ${currentPage===noOfPage|| noOfPage==0?'opacity-50':''}`} onClick={()=>goToNextPage()}  >Next</button>-
             <button disabled={currentPage===1}  className={`cursor-pointer ${currentPage===1?'opacity-50':''}`}   onClick={()=>goToPreviousPage()}>Previous</button>
         </div>
         <div>Per Page:{perPage}</div>

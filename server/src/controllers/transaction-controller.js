@@ -7,31 +7,33 @@ const allTransaction = async (req, res) => {
         const skip = (page - 1) * perPage
         const limit = perPage
 
-        const query ={}
+        const query = {}
 
         query.$expr = {
-            $eq: [
-                { $month: "$dateOfSale" },
-                monthNumber
-            ]
+            $eq: [{ $month:"$dateOfSale"}, monthNumber ]
         }
 
         if (search) {
-            query.$text = {
-                $search:search
-            }
+            const isNumber = isNaN(search)
+            query.$or =
+               isNumber ?[
+                {title: {$regex: search, $options:"i"}},
+                {descriptiion:{$regex: search, $options:"i"}},
+               ]:[
+                {price:{$gte: parseFloat(search) }},
+            ]
         }
 
-        const transactions = await Product.find(query).skip(skip).limit(limit) 
-        const totalTransaction =transactions.length
+        
+
+        const transactions = await Product.find(query).skip(skip).limit(limit)
 
         res.status(200).json({
             success: true,
-            message:"Successfully fetch all product transactions",
+            message: "Successfully fetch all product transactions",
             transactions,
-            totalTransaction,
-            page: parseInt(page),
-            perPage: parseInt(perPage)
+            page:parseInt(page),
+            perPage :parseInt(page)
 
         })
 

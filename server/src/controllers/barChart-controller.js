@@ -57,7 +57,6 @@ const fetchPriceRangeItems = async (req, res) => {
 
                     },
 
-
                 }
             }
         ])

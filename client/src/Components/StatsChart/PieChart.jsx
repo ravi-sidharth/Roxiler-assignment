@@ -56,7 +56,7 @@ const PieChart = () => {
         </select>
       </div>
 
-      <div className="w-[30%] mx-auto mt-5">
+      <div className="h-[300px] w-[30%] mx-auto mt-5">
         <Doughnut
           data={{
             labels: pieChartData.map((data) => data.category),

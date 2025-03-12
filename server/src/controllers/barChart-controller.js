@@ -18,7 +18,7 @@ const fetchPriceRangeItems = async (req, res) => {
             },
             {
                 $group: {
-                    _id:0,
+                    _id: 0,
                     "0-100": {
                         $sum: { $cond: [{ $and: [{ $gte: ["$price", 0] }, { $lte: ["$price", 100] }] }, 1, 0] }
                     },
@@ -58,21 +58,21 @@ const fetchPriceRangeItems = async (req, res) => {
                     },
 
                 }
-            }
+            },
+        
         ])
-        console.log("BarChartData", barChartData)
-        res.status(200).json({
-            success: true,
-            message: "Successfully fetched all items respective of price",
-            barChartData
-        })
+res.status(200).json({
+    success: true,
+    message: "Successfully fetched all items respective of price",
+    barChartData
+})
     } catch (e) {
-        console.log("Error occured while fetching price range items", e)
-        res.status(500).json({
-            success: false,
-            message: "Error occured while fetching price range items"
-        })
-    }
+    console.log("Error occured while fetching price range items", e)
+    res.status(500).json({
+        success: false,
+        message: "Error occured while fetching price range items"
+    })
+}
 }
 
 module.exports = fetchPriceRangeItems

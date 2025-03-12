@@ -7,7 +7,7 @@ const allTransaction = async (req, res) => {
         const skip = (page - 1) * perPage
         const limit = perPage
 
-        const query = {}
+        let query = {}
 
         query.$expr = {
             $eq: [{ $month:"$dateOfSale"}, monthNumber ]
@@ -24,8 +24,6 @@ const allTransaction = async (req, res) => {
             ]
         }
 
-        
-
         const transactions = await Product.find(query).skip(skip).limit(limit)
 
         res.status(200).json({
@@ -33,7 +31,7 @@ const allTransaction = async (req, res) => {
             message: "Successfully fetch all product transactions",
             transactions,
             page:parseInt(page),
-            perPage :parseInt(page)
+            perPage :parseInt(perPage)
 
         })
 

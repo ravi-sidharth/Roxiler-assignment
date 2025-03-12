@@ -21,9 +21,8 @@ const Dashboard = () => {
     }
 
     const fetchAllTransactions = async() => {
-      const result =await  axios.get(`/api/transactions?month=${month}&search=${search}&page=${currentPage}`)
+      const result =await  axios.get(`${import.meta.env.VITE_BACKEND_API}/api/transactions?month=${month}&search=${search}&page=${currentPage}`)
       setTransactionData(result.data.transactions)
-      console.log(result)
       setCurrentPage(result.data.page)
     }
 

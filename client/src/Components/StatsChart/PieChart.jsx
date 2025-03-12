@@ -22,8 +22,7 @@ const PieChart = () => {
   };
 
   const fetchUniqueCategoryData = async () => {
-    const result = await axios.get(`api/pie-chart?month=${month}`);
-    console.log(result.data.pieChartData);
+    const result = await axios.get(`${import.meta.env.VITE_BACKEND_API}/api/pie-chart?month=${month}`);
     setPieChartData(result.data.pieChartData);
   };
 
